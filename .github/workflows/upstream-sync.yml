@@ -1,0 +1,22 @@
+name: Upstream Sync
+
+on:
+  schedule:
+    - cron: "0 20 * * *"      # 每天 UTC 20:00（北京时间 04:00）同步一次
+  workflow_dispatch:           # 也可在 Actions 页手动点 Run
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync fork with upstream
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_PAT }}
+        run: |
+          gh repo sync ${{ github.repository }} \
+            --source 7Sageer/sublink-worker
+            --branch main \
+            --force
