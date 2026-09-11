@@ -11,18 +11,8 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: Sync upstream
-        run: |
-          git remote add upstream https://github.com/7Sageer/sublink-worker.git
-          git fetch upstream
-          git checkout main
-          git merge upstream/main --ff-only
-          git push origin main
+      - name: Sync fork with upstream
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh repo sync ${{ github.repository }} --source 7Sageer/sublink-worker --branch main
