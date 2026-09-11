@@ -14,20 +14,5 @@ jobs:
     steps:
       - name: Sync fork with upstream
         env:
-          GH_TOKEN: ${{ secrets.SYNC_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh repo sync ${{ github.repository }} --source 7Sageer/sublink-worker --branch main
-
-      - name: Keep workflow alive
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.SYNC_PAT }}
-
-      - name: Commit keepalive
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull
-          echo "$(date -u)" >> .github/keepalive
-          git add .github/keepalive
-          git commit -m "chore: keepalive $(date -u +%Y-%m-%d)" || echo "nothing to commit"
-          git push
